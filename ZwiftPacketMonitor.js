@@ -62,8 +62,11 @@ class ZwiftPacketMonitor extends EventEmitter {
               }
             } else if (ret.info.dstport === 3022) {
               let packet = clientToServerPacket.decode(buffer.slice(ret.offset, ret.offset + ret.info.length - 4))
-              if (packet.state) {
-                this.emit('outgoingPlayerState', packet.state, packet.world_time, ret.info.srcport, ret.info.srcaddr)
+              let packet1 = clientToServerPacket.toObject(packet, {
+                longs: String
+            });
+              if (packet1.state) {
+                this.emit('outgoingPlayerState', packet1.state, packet1.world_time, ret.info.srcport, ret.info.srcaddr)
               }
             }
           } catch (ex) {
